@@ -1,0 +1,8 @@
+
+./transfer.sh
+Transfer sent with hash 0x856d152033f209e0bb55d21368b41e49fbabc4665611d2a88bdaa47c4183c08f
+
+
+./register.sh
+Registered with hash 0xf6606112027cc3d35b81eb794a4bb8ecfe7b1d85b95803552b42249ad572b34b
+

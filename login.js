@@ -37,10 +37,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 // Import the API, Keyring and some utility functions
 var _a = require('@polkadot/api'), ApiPromise = _a.ApiPromise, WsProvider = _a.WsProvider;
 var Keyring = require('@polkadot/keyring').Keyring;
+var _b = require('@polkadot/util-crypto'), randomAsNumber = _b.randomAsNumber, randomAsHex = _b.randomAsHex;
 var BOB = '5EeHmFHozZfJqP7nnSw3t4cd6F9dwSDnMw5uDAqMjcSYVi1x';
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var provider, api, keyring, alice, nonce, register, hash, err_1;
+        var provider, api, keyring, alice, nonce, challenge, accesscheck, login, hash, err_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -53,20 +54,31 @@ function main() {
                     return [4 /*yield*/, api.query.system.account(alice.address)];
                 case 2:
                     nonce = (_a.sent()).nonce;
-                    register = api.tx.identity.requestRegistrationSel11("test1@test.com", "hello123");
-                    _a.label = 3;
+                    challenge = randomAsHex();
+                    console.log(challenge);
+                    return [4 /*yield*/, api.query.identity.tokens(challenge)];
                 case 3:
-                    _a.trys.push([3, 5, , 6]);
-                    return [4 /*yield*/, register.signAndSend(alice)];
+                    accesscheck = _a.sent();
+                    console.log(accesscheck);
+                    login = api.tx.identity.loginWeb3Sel16(challenge);
+                    _a.label = 4;
                 case 4:
-                    hash = _a.sent();
-                    console.log('Registered with hash', hash.toHex());
-                    return [3 /*break*/, 6];
+                    _a.trys.push([4, 6, , 7]);
+                    return [4 /*yield*/, login.signAndSend(alice)];
                 case 5:
+                    hash = _a.sent();
+                    console.log('login with hash', hash.toHex());
+                    //  const accesscheck = await api.query.identity.tokens(challenge);
+                    //  console.log(accesscheck);
+                    api.query.identity.tokens(challenge, function (result) {
+                        console.log(result);
+                    });
+                    return [3 /*break*/, 7];
+                case 6:
                     err_1 = _a.sent();
-                    console.log('Register error ', err_1);
-                    return [3 /*break*/, 6];
-                case 6: return [2 /*return*/];
+                    console.log('login error ', err_1);
+                    return [3 /*break*/, 7];
+                case 7: return [2 /*return*/];
             }
         });
     });

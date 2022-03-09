@@ -1,6 +1,7 @@
 // Import the API, Keyring and some utility functions
 const { ApiPromise, WsProvider } = require('@polkadot/api');
 const { Keyring } = require('@polkadot/keyring');
+const { randomAsNumber, randomAsHex } = require( '@polkadot/util-crypto');
 
 const BOB = '5EeHmFHozZfJqP7nnSw3t4cd6F9dwSDnMw5uDAqMjcSYVi1x';
 
@@ -22,14 +23,27 @@ async function main () {
 
   const { nonce } = await api.query.system.account(alice.address);
   // Create a extrinsic, transferring 12345 units to Bob
-  const register = api.tx.identity.requestRegistrationSel11("test1@test.com", "hello123");
+  const challenge = randomAsHex();
+  console.log(challenge);
+
+  const accesscheck = await api.query.identity.tokens(challenge);
+  console.log(accesscheck);
+
+  const login = api.tx.identity.loginWeb3Sel16(challenge);
 
   try {
   // Sign and send the transaction using our account
-  const hash = await register.signAndSend(alice);
-  console.log('Registered with hash', hash.toHex());
+  const hash = await login.signAndSend(alice);
+  console.log('login with hash', hash.toHex());
+//  const accesscheck = await api.query.identity.tokens(challenge);
+//  console.log(accesscheck);
+
+   api.query.identity.tokens(challenge, result => {
+     console.log(result);			    
+   })
+
   } catch(err) {
-  console.log('Register error ', err         );
+  console.log('login error ', err         );
 
   }
   

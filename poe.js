@@ -37,51 +37,29 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 // Import the API, Keyring and some utility functions
 var _a = require('@polkadot/api'), ApiPromise = _a.ApiPromise, WsProvider = _a.WsProvider;
 var Keyring = require('@polkadot/keyring').Keyring;
-var _b = require('@polkadot/util-crypto'), randomAsNumber = _b.randomAsNumber, randomAsHex = _b.randomAsHex;
 var BOB = '5EeHmFHozZfJqP7nnSw3t4cd6F9dwSDnMw5uDAqMjcSYVi1x';
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var provider, api, keyring, alice, nonce, challenge, accesscheck, login, hash, accesscheck_1, xx, err_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var provider, api, keyring, alice, nonce, accesscheck, _a, tmpAddress, tmpBlock;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     provider = new WsProvider('wss://student.selendra.org');
                     return [4 /*yield*/, ApiPromise.create({ provider: provider })];
                 case 1:
-                    api = _a.sent();
+                    api = _b.sent();
                     keyring = new Keyring({ type: 'sr25519' });
                     alice = keyring.addFromUri('author notable dial assume confirm inner hammer attack daring hair blue join');
                     return [4 /*yield*/, api.query.system.account(alice.address)];
                 case 2:
-                    nonce = (_a.sent()).nonce;
-                    challenge = randomAsHex();
-                    console.log(challenge);
-                    return [4 /*yield*/, api.query.identity.tokens(challenge)];
+                    nonce = (_b.sent()).nonce;
+                    return [4 /*yield*/, api.query.poeModule.proofs("1234")];
                 case 3:
-                    accesscheck = _a.sent();
-                    console.log(accesscheck);
-                    login = api.tx.identity.loginWeb3Sel16(challenge);
-                    _a.label = 4;
-                case 4:
-                    _a.trys.push([4, 7, , 8]);
-                    return [4 /*yield*/, login.signAndSend(alice)];
-                case 5:
-                    hash = _a.sent();
-                    console.log('login with hash', hash.toHex());
-                    return [4 /*yield*/, api.query.identity.tokens(challenge)];
-                case 6:
-                    accesscheck_1 = _a.sent();
-                    console.log(accesscheck_1);
-                    xx = accesscheck_1.toHuman()[0];
-                    console.log(xx.metadata);
-                    console.log(xx.sender);
-                    console.log(xx.data);
-                    return [3 /*break*/, 8];
-                case 7:
-                    err_1 = _a.sent();
-                    console.log('login error ', err_1);
-                    return [3 /*break*/, 8];
-                case 8: return [2 /*return*/];
+                    accesscheck = _b.sent();
+                    _a = accesscheck.toHuman(), tmpAddress = _a[0], tmpBlock = _a[1];
+                    console.log(tmpAddress);
+                    console.log(tmpBlock);
+                    return [2 /*return*/];
             }
         });
     });

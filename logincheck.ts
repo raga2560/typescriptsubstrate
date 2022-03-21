@@ -8,7 +8,7 @@ const idtolink = '5GrgA3Pu4JGTgHEQsYHBrLwXi585gEZGVUWMNHg1rE7jhRjy';
 const uriofid = 'orient portion sleep harbor laptop employ cradle bottom vast tornado shuffle noble'; 
 
 // The email-id we need to register
-const email = 'test32@ganesh.com';
+const email = 'test33@ganesh.com';
 const password = 'welcome123';
 
 // Don;t change below two lines
@@ -39,19 +39,19 @@ async function main () {
   console.log("Student address = "+idtolink);
 
 
-  let challenge = 0x26915155a6bfcd8712ed181357fbc93c0d23adaa8345cdbc3bdb833d8ea21b02;
-  console.log("querying  ");
+
+  const challenge = '5GrgArandom'; //(Math.random() + 1).toString(36).substr(32);
+
+
+  console.log("challenge = "+challenge);
+
+
+  console.log("querying  " + challenge);
   let accesscheck = await api.query.identity.tokens(challenge);
   console.log(JSON.stringify(accesscheck));
-
   if(accesscheck.inspect().inner) {
-  console.log(accesscheck);
+  console.log(accesscheck.toHuman());
 
-  let [xx] =  accesscheck.toHuman();
-
- // console.log(xx.metadata);
-  console.log("Id of access holder = "+ xx.sender);
-  console.log("Access status = "+ xx.data);
   } else {
 
   console.log("Access failed ");

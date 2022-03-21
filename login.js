@@ -49,7 +49,7 @@ var masterid = '5HnLfzCVR9vuM1z2fmZqsNazPqw6FzBJwr42HQRebmu6R4hH';
 var masteruri = 'author notable dial assume confirm inner hammer attack daring hair blue join';
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var provider, api, keyring, meo, alice, nonce, challenge, loginwithchallenge, accesscheck, xx;
+        var provider, api, keyring, meo, alice, nonce, challenge, loginwithchallenge, accesscheck;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -65,7 +65,7 @@ function main() {
                     nonce = (_a.sent()).nonce;
                     console.log("Master address = " + masterid);
                     console.log("Student address = " + idtolink);
-                    challenge = (Math.random() + 1).toString(36).substring(32);
+                    challenge = '5GrgArandom';
                     console.log("challenge = " + challenge);
                     loginwithchallenge = api.tx.identity.loginWeb3Sel16(challenge);
                     // Check if login is successful, using challenge provided
@@ -82,17 +82,13 @@ function main() {
                     // Sign and send the transaction using our account
                     _a.sent();
                     // console.log('login with hash', hash.toHex());
-                    console.log("querying  ");
+                    console.log("querying  " + challenge);
                     return [4 /*yield*/, api.query.identity.tokens(challenge)];
                 case 4:
                     accesscheck = _a.sent();
                     console.log(JSON.stringify(accesscheck));
                     if (accesscheck.inspect().inner) {
-                        console.log(accesscheck);
-                        xx = accesscheck.toHuman()[0];
-                        // console.log(xx.metadata);
-                        console.log("Id of access holder = " + xx.sender);
-                        console.log("Access status = " + xx.data);
+                        console.log(accesscheck.toHuman());
                     }
                     else {
                         console.log("Access failed ");

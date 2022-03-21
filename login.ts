@@ -40,7 +40,7 @@ async function main () {
 
 
 
-  const challenge = (Math.random() + 1).toString(36).substring(32);
+  const challenge = '5GrgArandom'; //(Math.random() + 1).toString(36).substr(32);
 
 
   console.log("challenge = "+challenge);
@@ -60,16 +60,12 @@ async function main () {
   await loginwithchallenge.signAndSend(alice);
  // console.log('login with hash', hash.toHex());
 
-  console.log("querying  ");
+  console.log("querying  " + challenge);
   let accesscheck = await api.query.identity.tokens(challenge);
   console.log(JSON.stringify(accesscheck));
   if(accesscheck.inspect().inner) {
-  console.log(accesscheck);
+  console.log(accesscheck.toHuman());
 
-  let [xx] =  accesscheck.toHuman();
-
- // console.log(xx.metadata);
-  console.log("Id of access holder = "+ xx);
   } else {
 
   console.log("Access failed ");

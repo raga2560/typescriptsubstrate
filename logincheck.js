@@ -42,14 +42,14 @@ var _b = require('@polkadot/util-crypto'), randomAsU8a = _b.randomAsU8a, randomA
 var idtolink = '5GrgA3Pu4JGTgHEQsYHBrLwXi585gEZGVUWMNHg1rE7jhRjy';
 var uriofid = 'orient portion sleep harbor laptop employ cradle bottom vast tornado shuffle noble';
 // The email-id we need to register
-var email = 'test32@ganesh.com';
+var email = 'test33@ganesh.com';
 var password = 'welcome123';
 // Don;t change below two lines
 var masterid = '5HnLfzCVR9vuM1z2fmZqsNazPqw6FzBJwr42HQRebmu6R4hH';
 var masteruri = 'author notable dial assume confirm inner hammer attack daring hair blue join';
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var provider, api, keyring, meo, alice, nonce, challenge, accesscheck, xx;
+        var provider, api, keyring, meo, alice, nonce, challenge, accesscheck;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -65,18 +65,15 @@ function main() {
                     nonce = (_a.sent()).nonce;
                     console.log("Master address = " + masterid);
                     console.log("Student address = " + idtolink);
-                    challenge = 0x26915155a6bfcd8712ed181357fbc93c0d23adaa8345cdbc3bdb833d8ea21b02;
-                    console.log("querying  ");
+                    challenge = '5GrgArandom';
+                    console.log("challenge = " + challenge);
+                    console.log("querying  " + challenge);
                     return [4 /*yield*/, api.query.identity.tokens(challenge)];
                 case 3:
                     accesscheck = _a.sent();
                     console.log(JSON.stringify(accesscheck));
                     if (accesscheck.inspect().inner) {
-                        console.log(accesscheck);
-                        xx = accesscheck.toHuman()[0];
-                        // console.log(xx.metadata);
-                        console.log("Id of access holder = " + xx.sender);
-                        console.log("Access status = " + xx.data);
+                        console.log(accesscheck.toHuman());
                     }
                     else {
                         console.log("Access failed ");

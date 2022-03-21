@@ -8,7 +8,7 @@ const idtolink = '5GrgA3Pu4JGTgHEQsYHBrLwXi585gEZGVUWMNHg1rE7jhRjy';
 const uriofid = 'orient portion sleep harbor laptop employ cradle bottom vast tornado shuffle noble'; 
 
 // The email-id we need to register
-const email = 'test33@ganesh.com';
+const email = 'test32@ganesh.com';
 const password = 'welcome123';
 
 // Don;t change below two lines
@@ -39,37 +39,19 @@ async function main () {
   console.log("Student address = "+idtolink);
 
 
-
-  const challenge = (Math.random() + 1).toString(36).substring(32);
-
-
-  console.log("challenge = "+challenge);
-
-  // Using web3-id, users logs in. A unique random challenge is provided
-  // If allowed, challenge is marked as allowed
-  const loginwithchallenge = api.tx.identity.loginWeb3Sel16(challenge);
-
-  // Check if login is successful, using challenge provided
-  // const accesscheck = await api.query.identity.tokens(challenge);
-  // console.log(accesscheck);
-
-  // const login = api.tx.identity.loginWeb3Sel16(challenge);
-
-
-  // Sign and send the transaction using our account
-  await loginwithchallenge.signAndSend(alice);
- // console.log('login with hash', hash.toHex());
-
+  let challenge = 0x26915155a6bfcd8712ed181357fbc93c0d23adaa8345cdbc3bdb833d8ea21b02;
   console.log("querying  ");
   let accesscheck = await api.query.identity.tokens(challenge);
   console.log(JSON.stringify(accesscheck));
+
   if(accesscheck.inspect().inner) {
   console.log(accesscheck);
 
   let [xx] =  accesscheck.toHuman();
 
  // console.log(xx.metadata);
-  console.log("Id of access holder = "+ xx);
+  console.log("Id of access holder = "+ xx.sender);
+  console.log("Access status = "+ xx.data);
   } else {
 
   console.log("Access failed ");

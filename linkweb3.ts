@@ -35,46 +35,65 @@ async function main () {
 
   const { nonce } = await api.query.system.account(meo.address);
 
+  let record = await api.query.identity.studentidOf(email);
+
   console.log("Master address = "+masterid);
   console.log("Student address = "+idtolink);
 
 
+  record = await api.query.identity.studentidOf(email);
+  if(record.inspect().inner) {
+    let recordp = JSON.parse(record);
+    console.log("Email " + email + " registered with " + recordp.accountId);
 
-  const challenge = (Math.random() + 1).toString(36).substring(32);
+    if(recordp.accountId != masterid)
+    {
+      console.log("Email " + email + " is linked with user " + recordp.accountId);
+      process.exit();
 
+    }
 
-  console.log("challenge = "+challenge);
-
-  // Using web3-id, users logs in. A unique random challenge is provided
-  // If allowed, challenge is marked as allowed
-  const loginwithchallenge = api.tx.identity.loginWeb3Sel16(challenge);
-
-  // Check if login is successful, using challenge provided
-  // const accesscheck = await api.query.identity.tokens(challenge);
-  // console.log(accesscheck);
-
-  // const login = api.tx.identity.loginWeb3Sel16(challenge);
-
-
-  // Sign and send the transaction using our account
-  await loginwithchallenge.signAndSend(alice);
- // console.log('login with hash', hash.toHex());
-
-  console.log("querying  ");
-  let accesscheck = await api.query.identity.tokens(challenge);
-  console.log(JSON.stringify(accesscheck));
-  if(accesscheck.inspect().inner) {
-  console.log(accesscheck);
-
-  let [xx] =  accesscheck.toHuman();
-
- // console.log(xx.metadata);
-  console.log("Id of access holder = "+ xx);
-  } else {
-
-  console.log("Access failed ");
+  }else {
+    console.log("Email "+ email + "  not registered" );
+    process.exit();
   }
 
+
+  // Check if the id provided has a email-id linked
+
+  record = await api.query.identity.emailId(idtolink);
+
+  console.log(JSON.stringify(record));
+
+  if(record.toHuman() != null) {
+  console.log(record.toHuman() + " is already linked to " + idtolink);
+//  console.log(" Exiting " );
+//    process.exit();
+  }else {
+  console.log(idtolink + " will be linked " );
+  } 
+
+  console.log("Id "+ idtolink + " Linking with Email ");
+    
+  const referal = (Math.random() + 1).toString(36).substring(7);
+  console.log("referal = "+referal);
+
+
+  // Master id creates referal to link web3 to be given
+  const referalset = api.tx.identity.setReferalSel12(email, referal);
+  await referalset.signAndSend(meo);
+  console.log("referal set ");
+
+/*
+  console.log("Linking referal");
+  // Master id links using referal web3-id to email-id
+  const linkedweb3 = api.tx.identity.createWeb3linkSel15(email, idtolink, referal);
+  await linkedweb3.signAndSend(alice);
+  console.log("Referal linked ");
+
+
+  console.log("Restart to verify ");
+*/
  
 
 }

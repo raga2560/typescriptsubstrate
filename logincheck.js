@@ -42,14 +42,14 @@ var _b = require('@polkadot/util-crypto'), randomAsU8a = _b.randomAsU8a, randomA
 var idtolink = '5GrgA3Pu4JGTgHEQsYHBrLwXi585gEZGVUWMNHg1rE7jhRjy';
 var uriofid = 'orient portion sleep harbor laptop employ cradle bottom vast tornado shuffle noble';
 // The email-id we need to register
-var email = 'test337@ganesh.com';
+var email = 'test32@ganesh.com';
 var password = 'welcome123';
 // Don;t change below two lines
 var masterid = '5HnLfzCVR9vuM1z2fmZqsNazPqw6FzBJwr42HQRebmu6R4hH';
 var masteruri = 'author notable dial assume confirm inner hammer attack daring hair blue join';
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var provider, api, keyring, meo, alice, nonce, record, registered, recordp;
+        var provider, api, keyring, meo, alice, nonce, challenge, accesscheck, xx;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -63,41 +63,23 @@ function main() {
                     return [4 /*yield*/, api.query.system.account(meo.address)];
                 case 2:
                     nonce = (_a.sent()).nonce;
-                    return [4 /*yield*/, api.query.identity.studentidOf(email)];
-                case 3:
-                    record = _a.sent();
                     console.log("Master address = " + masterid);
                     console.log("Student address = " + idtolink);
-                    if (!!record.inspect().inner) return [3 /*break*/, 5];
-                    registered = api.tx.identity.requestRegistrationSel11(email, password);
-                    return [4 /*yield*/, registered.signAndSend(meo)];
-                case 4:
-                    _a.sent();
-                    console.log("New record for email created = " + email);
-                    console.log("password = " + password);
-                    return [3 /*break*/, 6];
-                case 5:
-                    console.log("Email " + email + " registered with " + JSON.parse(record).accountId);
-                    console.log("Data in Blockchain is =" + JSON.stringify(record));
-                    console.log("Email linked is  =" + JSON.stringify(JSON.parse(record).info.email));
-                    console.log("Account linked is  =" + JSON.stringify(JSON.parse(record).info.account));
-                    console.log("Account Id = " + JSON.parse(record).accountId);
-                    process.exit();
-                    _a.label = 6;
-                case 6: return [4 /*yield*/, api.query.identity.studentidOf(email)];
-                case 7:
-                    record = _a.sent();
-                    if (record.inspect().inner) {
-                        recordp = JSON.parse(record);
-                        console.log("Email " + email + " registered with " + recordp.accountId);
-                        console.log("Data in Blockchain is =" + JSON.stringify(record));
-                        console.log("Email linked is  =" + JSON.stringify(JSON.parse(record).info.email));
-                        console.log("Account linked is  =" + JSON.stringify(JSON.parse(record).info.account));
-                        console.log("Account Id = " + recordp.accountId);
+                    challenge = 0x26915155a6bfcd8712ed181357fbc93c0d23adaa8345cdbc3bdb833d8ea21b02;
+                    console.log("querying  ");
+                    return [4 /*yield*/, api.query.identity.tokens(challenge)];
+                case 3:
+                    accesscheck = _a.sent();
+                    console.log(JSON.stringify(accesscheck));
+                    if (accesscheck.inspect().inner) {
+                        console.log(accesscheck);
+                        xx = accesscheck.toHuman()[0];
+                        // console.log(xx.metadata);
+                        console.log("Id of access holder = " + xx.sender);
+                        console.log("Access status = " + xx.data);
                     }
                     else {
-                        console.log("No record found due to delay");
-                        console.log("Rerun to verify ");
+                        console.log("Access failed ");
                     }
                     return [2 /*return*/];
             }

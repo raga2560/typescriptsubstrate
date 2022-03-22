@@ -1,7 +1,7 @@
 curl --request POST \
   --url https://api.sendinblue.com/v3/smtp/email \
   --header 'accept: application/json' \
-  --header 'api-key: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' \
+  --header 'api-key:' \
   --header 'content-type: application/json' \
   --data '{  
    "sender":{  

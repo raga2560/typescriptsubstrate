@@ -1,6 +1,8 @@
 // Import the API, Keyring and some utility functions
 const { ApiPromise, WsProvider } = require('@polkadot/api');
 const { Keyring } = require('@polkadot/keyring');
+const { stringToU8a, u8aToHex } = require ('@polkadot/util');
+
 const { randomAsU8a, randomAsNumber, randomAsHex } = require( '@polkadot/util-crypto');
 
 // The ID of web3 user we are registering
@@ -70,6 +72,13 @@ async function main () {
 
   console.log("Access failed ");
   }
+
+  const message = stringToU8a('this is our message');
+
+const  signature = alice.sign(message);
+const isValid = alice.verify(message, signature, alice.publicKey);
+
+console.log(`${u8aToHex(signature)} is ${isValid ? 'valid' : 'invalid'}`);
 
  
 

@@ -37,7 +37,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 // Import the API, Keyring and some utility functions
 var _a = require('@polkadot/api'), ApiPromise = _a.ApiPromise, WsProvider = _a.WsProvider;
 var Keyring = require('@polkadot/keyring').Keyring;
-var _b = require('@polkadot/util-crypto'), randomAsU8a = _b.randomAsU8a, randomAsNumber = _b.randomAsNumber, randomAsHex = _b.randomAsHex;
+var _b = require('@polkadot/util'), stringToU8a = _b.stringToU8a, u8aToHex = _b.u8aToHex;
+var _c = require('@polkadot/util-crypto'), randomAsU8a = _c.randomAsU8a, randomAsNumber = _c.randomAsNumber, randomAsHex = _c.randomAsHex;
 // The ID of web3 user we are registering
 var idtolink = '5GrgA3Pu4JGTgHEQsYHBrLwXi585gEZGVUWMNHg1rE7jhRjy';
 var uriofid = 'orient portion sleep harbor laptop employ cradle bottom vast tornado shuffle noble';
@@ -49,7 +50,7 @@ var masterid = '5HnLfzCVR9vuM1z2fmZqsNazPqw6FzBJwr42HQRebmu6R4hH';
 var masteruri = 'author notable dial assume confirm inner hammer attack daring hair blue join';
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var provider, api, keyring, meo, alice, nonce, challenge, loginwithchallenge, accesscheck;
+        var provider, api, keyring, meo, alice, nonce, challenge, loginwithchallenge, accesscheck, message, signature, isValid;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -93,6 +94,10 @@ function main() {
                     else {
                         console.log("Access failed ");
                     }
+                    message = stringToU8a('this is our message');
+                    signature = alice.sign(message);
+                    isValid = alice.verify(message, signature, alice.publicKey);
+                    console.log("".concat(u8aToHex(signature), " is ").concat(isValid ? 'valid' : 'invalid'));
                     return [2 /*return*/];
             }
         });

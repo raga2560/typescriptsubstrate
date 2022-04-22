@@ -3,6 +3,15 @@ const { ApiPromise, WsProvider } = require('@polkadot/api');
 const { Keyring } = require('@polkadot/keyring');
 const { randomAsU8a, randomAsNumber, randomAsHex } = require( '@polkadot/util-crypto');
 
+
+const { web3Accounts, web3Enable, web3FromAddress,
+  web3ListRpcProviders,
+        web3FromSource,
+  web3UseRpcProvider
+ } = require ('@polkadot/extension-dapp');
+
+
+
 // The ID of web3 user we are registering
 const idtolink = '5GrgA3Pu4JGTgHEQsYHBrLwXi585gEZGVUWMNHg1rE7jhRjy';
 const uriofid = 'orient portion sleep harbor laptop employ cradle bottom vast tornado shuffle noble'; 
@@ -32,70 +41,63 @@ async function main () {
   const meo = keyring.addFromUri(masteruri);
 
   let alice = keyring.addFromUri(uriofid);
-    console.log(alice.toJson());
-    console.log(JSON.stringify(alice));
+
   const { nonce } = await api.query.system.account(meo.address);
 
   let record = await api.query.identity.studentidOf(email);
 
-  console.log("Master address = "+masterid);
-  console.log("Student address = "+idtolink);
-
-
-  record = await api.query.identity.studentidOf(email);
   if(record.inspect().inner) {
     let recordp = JSON.parse(record);
     console.log("Email " + email + " registered with " + recordp.accountId);
-
-    if(recordp.accountId != masterid)
-    {
-      console.log("Email " + email + " is linked with user " + recordp.accountId);
-      process.exit();
-
-    }
+    console.log(JSON.stringify(recordp));
 
   }else {
     console.log("Email "+ email + "  not registered" );
     process.exit();
   }
 
+ let recordp = JSON.parse(record);
 
-  // Check if the id provided has a email-id linked
+ if(recordp.info.passwordhash)
+	console.log(recordp.info.passwordhash);
 
-  record = await api.query.identity.emailId(idtolink);
+ // this call fires up the authorization popup
+const extensions = await web3Enable('my cool dapp');
 
-  console.log(JSON.stringify(record));
+if (extensions.length === 0) {
+    // no extension installed, or the user did not accept the authorization
+    // in this case we should inform the use and give a link to the extension
+    return;
+}
 
-  if(record.toHuman() != null) {
-  console.log(record.toHuman() + " is already linked to " + idtolink);
-//  console.log(" Exiting " );
-//    process.exit();
-  }else {
-  console.log(idtolink + " will be linked " );
-  } 
+// we are now informed that the user has at least one extension and that we
+// will be able to show and use accounts
+const allAccounts = await web3Accounts();
 
-  console.log("Id "+ idtolink + " Linking with Email ");
-    
-  const referal = (Math.random() + 1).toString(36).substring(7);
-  console.log("referal = "+referal);
+ // We arbitraily select the first account returned from the above snippet
+// `account` is of type InjectedAccountWithMeta
+const account = alice; //allAccounts[0];
 
-
-  // Master id creates referal to link web3 to be given
-  const referalset = api.tx.identity.setReferalSel12(email, referal);
-  await referalset.signAndSend(meo);
-  console.log("referal set ");
-
-/*
-  console.log("Linking referal");
-  // Master id links using referal web3-id to email-id
-  const linkedweb3 = api.tx.identity.createWeb3linkSel15(email, idtolink, referal);
-  await linkedweb3.signAndSend(alice);
-  console.log("Referal linked ");
+// to be able to retrieve the signer interface from this account
+// we can use web3FromSource which will return an InjectedExtension type
+const injector = await web3FromSource(account.meta.source);
 
 
-  console.log("Restart to verify ");
-*/
- 
+// this injector object has a signer and a signRaw method
+// to be able to sign raw bytes
+const signRaw = injector?.signer?.signRaw;
+
+if (!!signRaw) {
+    // after making sure that signRaw is defined
+    // we can use it to sign our message
+    const { signature } = await signRaw({
+        address: account.address,
+        data: stringToHex('message to sign'),
+        type: 'bytes'
+    });
+
+}
+
 
 }
 

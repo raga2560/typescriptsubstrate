@@ -1,15 +1,14 @@
 // Import the API, Keyring and some utility functions
 const { ApiPromise, WsProvider } = require('@polkadot/api');
 const { Keyring } = require('@polkadot/keyring');
-const { u8aToHex } = require('@polkadot/util');
-const { sha256AsU8a, blake2AsHex , randomAsU8a, randomAsNumber, randomAsHex } = require( '@polkadot/util-crypto');
+const { randomAsU8a, randomAsNumber, randomAsHex } = require( '@polkadot/util-crypto');
 
 // The ID of web3 user we are registering
 const idtolink = '5GrgA3Pu4JGTgHEQsYHBrLwXi585gEZGVUWMNHg1rE7jhRjy';
 const uriofid = 'orient portion sleep harbor laptop employ cradle bottom vast tornado shuffle noble'; 
 
 // The email-id we need to register
-const email = 'test33@ganesh.com';
+const email = 'test32@ganesh.com';
 const password = 'welcome123';
 
 // Don;t change below two lines
@@ -32,19 +31,19 @@ async function main () {
   // Add Alice to our keyring with a hard-deived path (empty phrase, so uses dev)
   const meo = keyring.addFromUri(masteruri);
 
-	const hash = blake2AsHex("data goes here")
-console.log("blake= "+hash)
-const shahash =	sha256AsU8a("welcome123");
-console.log("shahash= "+u8aToHex(shahash))
   let alice = keyring.addFromUri(uriofid);
-    console.log(alice.toJson());
-    console.log(JSON.stringify(alice));
+
   const { nonce } = await api.query.system.account(meo.address);
 
   let record = await api.query.identity.studentidOf(email);
 
-  console.log("Master address = "+masterid);
-  console.log("Student address = "+idtolink);
+  if(!record.inspect().inner) {
+  // Master id registers email, passworf provided
+  const registered = api.tx.identity.requestRegistrationSel11(email, password);
+  console.log("email = "+email);
+  console.log("password = "+password);
+  await registered.signAndSend(meo);
+  }
 
 
   record = await api.query.identity.studentidOf(email);
@@ -52,33 +51,22 @@ console.log("shahash= "+u8aToHex(shahash))
     let recordp = JSON.parse(record);
     console.log("Email " + email + " registered with " + recordp.accountId);
 
-    if(recordp.accountId != masterid)
-    {
-      console.log("Email " + email + " is linked with user " + recordp.accountId);
-      process.exit();
-
-    }
-
   }else {
     console.log("Email "+ email + "  not registered" );
     process.exit();
   }
 
 
-  // Check if the id provided has a email-id linked
+  // Check if the given user is already linked
 
   record = await api.query.identity.emailId(idtolink);
+    console.log(JSON.stringify(record));
 
-  console.log(JSON.stringify(record));
-
-  if(record.toHuman() != null) {
-  console.log(record.toHuman() + " is already linked to " + idtolink);
-//  console.log(" Exiting " );
-//    process.exit();
+  if(record.inspect().inner) {
+    console.log(JSON.stringify(record));
+    let recordp = JSON.parse(record);
+    console.log("Id "+ idtolink + " linked to Email ");
   }else {
-  console.log(idtolink + " will be linked " );
-  } 
-
   console.log("Id "+ idtolink + " Linking with Email ");
     
   const referal = (Math.random() + 1).toString(36).substring(7);
@@ -90,16 +78,29 @@ console.log("shahash= "+u8aToHex(shahash))
   await referalset.signAndSend(meo);
   console.log("referal set ");
 
-/*
+
   console.log("Linking referal");
   // Master id links using referal web3-id to email-id
   const linkedweb3 = api.tx.identity.createWeb3linkSel15(email, idtolink, referal);
   await linkedweb3.signAndSend(alice);
   console.log("Referal linked ");
 
+  }
 
-  console.log("Restart to verify ");
-*/
+  record = await api.query.identity.emailId(idtolink);
+
+  console.log(JSON.stringify(record));
+
+  // if(record.inspect().inner) {
+  if(record) {
+    console.log("Id "+ idtolink + " linked to Email "+ record.toHuman());
+  }else {  
+    console.log("Exiting as id is not linked  ");
+    process.exit();
+  }
+
+
+
  
 
 }
